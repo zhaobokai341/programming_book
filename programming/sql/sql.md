@@ -1,22 +1,57 @@
-````markdown
-# SQL Instructions
+# **Ultimate SQL Cheat Sheet**
 
-## 1. **SELECT**
-The `SELECT` statement is used to query the database and retrieve data.
+---
+
+## **1. SELECT**
+
+Retrieve data from one or more tables.
 
 ```sql
 SELECT column1, column2 FROM table_name;
-````
+```
 
-* To select all columns:
+* Select all columns:
 
 ```sql
 SELECT * FROM table_name;
 ```
 
-## 2. **INSERT**
+* With `DISTINCT`:
 
-The `INSERT` statement is used to insert new records into a table.
+```sql
+SELECT DISTINCT column_name FROM table_name;
+```
+
+* With alias:
+
+```sql
+SELECT column1 AS c1, column2 AS c2 FROM table_name;
+```
+
+---
+
+## **2. WHERE**
+
+Filter rows based on conditions.
+
+```sql
+SELECT * FROM table_name
+WHERE condition;
+```
+
+* Operators: `=, <>, !=, >, <, >=, <=`
+* Logical: `AND, OR, NOT`
+* Pattern: `LIKE 'pattern%'`
+* Null check: `IS NULL`, `IS NOT NULL`
+* Range: `BETWEEN value1 AND value2`
+* Set: `IN (value1, value2, ...)`
+* Existence: `EXISTS (subquery)`
+
+---
+
+## **3. INSERT**
+
+Insert new rows.
 
 ```sql
 INSERT INTO table_name (column1, column2) VALUES (value1, value2);
@@ -25,203 +60,402 @@ INSERT INTO table_name (column1, column2) VALUES (value1, value2);
 * Insert multiple rows:
 
 ```sql
-INSERT INTO table_name (column1, column2) VALUES (value1, value2), (value3, value4);
+INSERT INTO table_name (column1, column2) VALUES 
+(value1, value2), 
+(value3, value4);
 ```
 
-## 3. **UPDATE**
-
-The `UPDATE` statement is used to modify existing records in a table.
+* Insert with SELECT:
 
 ```sql
-UPDATE table_name SET column1 = value1, column2 = value2 WHERE condition;
+INSERT INTO table_name (column1, column2)
+SELECT column1, column2 FROM other_table;
 ```
 
-## 4. **DELETE**
+---
 
-The `DELETE` statement is used to delete records from a table.
+## **4. UPDATE**
+
+Modify existing rows.
 
 ```sql
-DELETE FROM table_name WHERE condition;
+UPDATE table_name
+SET column1 = value1, column2 = value2
+WHERE condition;
 ```
 
-* To delete all records:
+* Update all rows (no WHERE):
+
+```sql
+UPDATE table_name
+SET column1 = value;
+```
+
+---
+
+## **5. DELETE**
+
+Remove rows.
+
+```sql
+DELETE FROM table_name
+WHERE condition;
+```
+
+* Delete all rows:
 
 ```sql
 DELETE FROM table_name;
 ```
 
-## 5. **CREATE TABLE**
+---
 
-The `CREATE TABLE` statement is used to create a new table in the database.
+## **6. CREATE TABLE**
+
+Create a new table.
 
 ```sql
 CREATE TABLE table_name (
-    column1 datatype,
-    column2 datatype,
-    column3 datatype
+    column1 datatype [constraints],
+    column2 datatype [constraints],
+    ...
 );
 ```
 
-## 6. **ALTER TABLE**
+* Common data types: `INT`, `BIGINT`, `DECIMAL`, `NUMERIC`, `FLOAT`, `CHAR(n)`, `VARCHAR(n)`, `TEXT`, `DATE`, `DATETIME`, `TIMESTAMP`, `BOOLEAN`
 
-The `ALTER TABLE` statement is used to modify an existing table structure.
+* Common constraints: `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `NOT NULL`, `DEFAULT`, `CHECK`, `AUTO_INCREMENT` / `SERIAL`
 
-* Add a new column:
+---
+
+## **7. ALTER TABLE**
+
+Modify an existing table.
+
+* Add column:
 
 ```sql
 ALTER TABLE table_name ADD column_name datatype;
 ```
 
-* Drop a column:
+* Drop column:
 
 ```sql
 ALTER TABLE table_name DROP COLUMN column_name;
 ```
 
-## 7. **DROP TABLE**
+* Modify column:
 
-The `DROP TABLE` statement is used to delete a table and all its data from the database.
+```sql
+ALTER TABLE table_name MODIFY COLUMN column_name datatype;
+```
+
+* Add constraint:
+
+```sql
+ALTER TABLE table_name ADD CONSTRAINT constraint_name PRIMARY KEY (column_name);
+```
+
+---
+
+## **8. DROP TABLE / DROP DATABASE**
+
+Delete a table or database.
 
 ```sql
 DROP TABLE table_name;
+DROP DATABASE database_name;
 ```
 
-## 8. **CREATE INDEX**
+---
 
-The `CREATE INDEX` statement is used to create an index (a faster lookup method) for a table.
+## **9. INDEX**
+
+Create an index to optimize queries.
 
 ```sql
 CREATE INDEX index_name ON table_name (column_name);
 ```
 
-## 9. **DROP INDEX**
-
-The `DROP INDEX` statement is used to delete an index.
+* Unique index:
 
 ```sql
-DROP INDEX index_name;
+CREATE UNIQUE INDEX index_name ON table_name (column_name);
 ```
 
-## 10. **JOIN**
+* Drop index:
 
-The `JOIN` clause is used to combine rows from two or more tables based on a related column.
+```sql
+DROP INDEX index_name;  -- MySQL
+DROP INDEX index_name ON table_name;  -- SQL Server/PostgreSQL
+```
 
-* **INNER JOIN**: Returns rows when there is a match in both tables.
+---
+
+## **10. JOIN**
+
+Combine rows from multiple tables.
+
+* **INNER JOIN**:
 
 ```sql
 SELECT columns FROM table1
 INNER JOIN table2 ON table1.column = table2.column;
 ```
 
-* **LEFT JOIN**: Returns all rows from the left table, even if there’s no match in the right table.
+* **LEFT (OUTER) JOIN**:
 
 ```sql
 SELECT columns FROM table1
 LEFT JOIN table2 ON table1.column = table2.column;
 ```
 
-## 11. **GROUP BY**
-
-The `GROUP BY` statement is used to group rows that have the same values into summary rows.
+* **RIGHT (OUTER) JOIN**:
 
 ```sql
-SELECT column, COUNT(*) FROM table_name
-GROUP BY column;
+SELECT columns FROM table1
+RIGHT JOIN table2 ON table1.column = table2.column;
 ```
 
-## 12. **HAVING**
-
-The `HAVING` clause is used to filter records after a `GROUP BY` is applied.
+* **FULL (OUTER) JOIN**:
 
 ```sql
-SELECT column, COUNT(*) FROM table_name
+SELECT columns FROM table1
+FULL OUTER JOIN table2 ON table1.column = table2.column;
+```
+
+* **CROSS JOIN**:
+
+```sql
+SELECT * FROM table1 CROSS JOIN table2;
+```
+
+---
+
+## **11. GROUP BY & HAVING**
+
+Group rows and filter grouped data.
+
+```sql
+SELECT column, COUNT(*) 
+FROM table_name
 GROUP BY column
 HAVING COUNT(*) > 5;
 ```
 
-## 13. **ORDER BY**
+---
 
-The `ORDER BY` statement is used to sort the result set in either ascending or descending order.
+## **12. ORDER BY**
+
+Sort result sets.
 
 ```sql
 SELECT * FROM table_name
 ORDER BY column_name ASC;  -- ascending
+ORDER BY column_name DESC; -- descending
+```
+
+---
+
+## **13. LIMIT / OFFSET**
+
+Limit results.
+
+```sql
+SELECT * FROM table_name
+LIMIT 5;  -- first 5 rows
 ```
 
 ```sql
 SELECT * FROM table_name
-ORDER BY column_name DESC;  -- descending
+LIMIT 5 OFFSET 10;  -- rows 11-15
 ```
 
-## 14. **DISTINCT**
+---
 
-The `DISTINCT` keyword is used to return only distinct (different) values.
+## **14. CASE**
 
-```sql
-SELECT DISTINCT column_name FROM table_name;
-```
-
-## 15. **LIMIT**
-
-The `LIMIT` clause is used to specify the number of records to return.
-
-```sql
-SELECT * FROM table_name LIMIT 5;
-```
-
-## 16. **EXISTS**
-
-The `EXISTS` operator is used to test for the existence of rows returned by a subquery.
-
-```sql
-SELECT column_name FROM table_name
-WHERE EXISTS (SELECT 1 FROM other_table WHERE condition);
-```
-
-## 17. **IN**
-
-The `IN` operator allows you to specify multiple values in a `WHERE` clause.
-
-```sql
-SELECT * FROM table_name
-WHERE column_name IN (value1, value2, value3);
-```
-
-## 18. **BETWEEN**
-
-The `BETWEEN` operator is used to filter the result set within a certain range.
-
-```sql
-SELECT * FROM table_name
-WHERE column_name BETWEEN value1 AND value2;
-```
-
-## 19. **CASE**
-
-The `CASE` statement is used to create conditions in SQL queries (like an IF-ELSE statement).
+Conditional logic.
 
 ```sql
 SELECT column1,
-    CASE 
-        WHEN column2 > 50 THEN 'High'
-        WHEN column2 <= 50 THEN 'Low'
-        ELSE 'Unknown'
-    END AS category
+       CASE
+           WHEN column2 > 50 THEN 'High'
+           WHEN column2 <= 50 THEN 'Low'
+           ELSE 'Unknown'
+       END AS category
 FROM table_name;
 ```
 
-## 20. **TRANSACTIONS**
+---
 
-A transaction is a way to execute multiple SQL queries as a single unit. Transactions ensure that all queries are executed successfully before committing to the database.
+## **15. TRANSACTIONS**
+
+Ensure multiple statements execute as a single unit.
 
 ```sql
 BEGIN TRANSACTION;
 
 -- SQL statements here
 
-COMMIT;  -- or ROLLBACK if there's an error
+COMMIT;   -- save changes
+ROLLBACK; -- undo changes
 ```
 
 ---
 
-This is a basic overview of SQL instructions. Each command has various variations and nuances depending on the database system (e.g., MySQL, PostgreSQL, SQL Server, etc.).
+## **16. AGGREGATE FUNCTIONS**
+
+| Function      | Description    |
+| ------------- | -------------- |
+| `COUNT(*)`    | Number of rows |
+| `SUM(column)` | Sum of values  |
+| `AVG(column)` | Average value  |
+| `MIN(column)` | Minimum value  |
+| `MAX(column)` | Maximum value  |
+
+---
+
+## **17. STRING FUNCTIONS**
+
+| Function                     | Description         |
+| ---------------------------- | ------------------- |
+| `CONCAT(str1, str2, ...)`    | Concatenate strings |
+| `LENGTH(str)`                | String length       |
+| `SUBSTRING(str, start, len)` | Extract substring   |
+| `UPPER(str)` / `LOWER(str)`  | Change case         |
+| `TRIM(str)`                  | Remove spaces       |
+| `REPLACE(str, old, new)`     | Replace substring   |
+
+---
+
+## **18. DATE & TIME FUNCTIONS**
+
+| Function                                         | Description                 |
+| ------------------------------------------------ | --------------------------- |
+| `NOW()` / `CURRENT_TIMESTAMP`                    | Current date & time         |
+| `CURDATE()`                                      | Current date                |
+| `CURTIME()`                                      | Current time                |
+| `DATE(column)`                                   | Extract date                |
+| `YEAR(column)` / `MONTH(column)` / `DAY(column)` | Extract parts of date       |
+| `DATEDIFF(date1, date2)`                         | Difference in days          |
+| `DATE_ADD(date, INTERVAL n unit)`                | Add interval to date        |
+| `DATE_SUB(date, INTERVAL n unit)`                | Subtract interval from date |
+
+---
+
+## **19. CONSTRAINTS**
+
+| Constraint                  | Description              |
+| --------------------------- | ------------------------ |
+| `PRIMARY KEY`               | Unique identifier        |
+| `FOREIGN KEY`               | References another table |
+| `UNIQUE`                    | Unique values            |
+| `NOT NULL`                  | Column must have value   |
+| `CHECK`                     | Column value check       |
+| `DEFAULT`                   | Default value            |
+| `AUTO_INCREMENT` / `SERIAL` | Auto increment numbers   |
+
+---
+
+## **20. SUBQUERIES**
+
+Nested queries for advanced filtering.
+
+```sql
+SELECT column FROM table1
+WHERE column IN (SELECT column FROM table2 WHERE condition);
+```
+
+* Exists:
+
+```sql
+SELECT column FROM table1
+WHERE EXISTS (SELECT 1 FROM table2 WHERE table1.id = table2.id);
+```
+
+---
+
+## **21. SET OPERATORS**
+
+| Operator           | Description                       |
+| ------------------ | --------------------------------- |
+| `UNION`            | Combine results (distinct)        |
+| `UNION ALL`        | Combine results (all rows)        |
+| `INTERSECT`        | Rows common to both queries       |
+| `EXCEPT` / `MINUS` | Rows in first query not in second |
+
+---
+
+## **22. VIEWS**
+
+Create a virtual table.
+
+```sql
+CREATE VIEW view_name AS
+SELECT column1, column2 FROM table_name
+WHERE condition;
+```
+
+* Update or drop view:
+
+```sql
+ALTER VIEW view_name AS
+SELECT ...;
+
+DROP VIEW view_name;
+```
+
+---
+
+## **23. STORED PROCEDURES & FUNCTIONS**
+
+* **Stored Procedure**:
+
+```sql
+CREATE PROCEDURE procedure_name(parameters)
+BEGIN
+    -- SQL statements
+END;
+```
+
+* **Function**:
+
+```sql
+CREATE FUNCTION function_name(parameters)
+RETURNS datatype
+BEGIN
+    -- SQL statements
+    RETURN value;
+END;
+```
+
+---
+
+## **24. TRIGGERS**
+
+Automatically execute on events.
+
+```sql
+CREATE TRIGGER trigger_name
+BEFORE INSERT ON table_name
+FOR EACH ROW
+BEGIN
+    -- SQL statements
+END;
+```
+
+---
+
+## **25. TRANSACTION ISOLATION LEVELS**
+
+| Level              | Description                                 |
+| ------------------ | ------------------------------------------- |
+| `READ UNCOMMITTED` | Can read uncommitted changes                |
+| `READ COMMITTED`   | Only read committed changes                 |
+| `REPEATABLE READ`  | Same select yields same rows in transaction |
+| `SERIALIZABLE`     | Highest isolation, prevent phantom reads    |
+
+---
+
+This cheat sheet now includes **all core SQL commands, advanced features, constraints, aggregate functions, string/date functions, transactions, joins, subqueries, views, procedures, triggers, and set operators**, covering **MySQL, PostgreSQL, SQL Server, and standard SQL syntax**.
