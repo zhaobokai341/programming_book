@@ -1,199 +1,227 @@
-Below is a **JavaScript (JS) local cheat sheet** — **no document / no canvas**, just plain Markdown here.
+# JavaScript – Functions, Classes, Values, and Return Values
 
 ---
 
-## 1. Basics
+## 1. Global Functions
 
-```js
-// comment
-let x = 10;      // mutable
-const y = 20;    // immutable
-var z = 30;      // function-scoped (avoid)
-```
-
-| Keyword | Function                 |
-| ------- | ------------------------ |
-| `let`   | Block-scoped variable    |
-| `const` | Block-scoped constant    |
-| `var`   | Function-scoped (legacy) |
-
----
-
-## 2. Data Types
-
-| Type      | Example        |
-| --------- | -------------- |
-| Number    | `42`, `3.14`   |
-| String    | `"hi"`         |
-| Boolean   | `true`         |
-| Undefined | `let a;`       |
-| Null      | `null`         |
-| Object    | `{}`           |
-| Array     | `[]`           |
-| Function  | `function(){}` |
-| Symbol    | `Symbol('id')` |
-| BigInt    | `123n`         |
-
-```js
-typeof 123      // "number"
-Array.isArray([]) // true
-```
+| Function               | Purpose                     | Returns      |
+| ---------------------- | --------------------------- | ------------ |
+| `eval(str)`            | Execute JS code from string | Any          |
+| `isNaN(value)`         | Check if value is NaN       | `boolean`    |
+| `isFinite(value)`      | Check finite number         | `boolean`    |
+| `parseInt(str, radix)` | String → integer            | `number`     |
+| `parseFloat(str)`      | String → float              | `number`     |
+| `encodeURI(uri)`       | Encode URI                  | `string`     |
+| `decodeURI(uri)`       | Decode URI                  | `string`     |
+| `setTimeout(fn, ms)`   | Delay execution             | `timeoutID`  |
+| `setInterval(fn, ms)`  | Repeat execution            | `intervalID` |
+| `clearTimeout(id)`     | Cancel timeout              | `undefined`  |
+| `clearInterval(id)`    | Cancel interval             | `undefined`  |
 
 ---
 
-## 3. Operators
+## 2. Console Functions
 
-| Operator    | Function           |   |    |
-| ----------- | ------------------ | - | -- |
-| `+ - * / %` | Math               |   |    |
-| `**`        | Power              |   |    |
-| `=`         | Assign             |   |    |
-| `==`        | Loose compare      |   |    |
-| `===`       | Strict compare     |   |    |
-| `&&`        | AND                |   |    |
-| `           |                    | ` | OR |
-| `!`         | NOT                |   |    |
-| `??`        | Nullish coalescing |   |    |
-| `?.`        | Optional chaining  |   |    |
-
-```js
-a ?? b        // if a is null/undefined
-obj?.user?.id
-```
+| Function            | Purpose       | Returns     |
+| ------------------- | ------------- | ----------- |
+| `console.log()`     | Print output  | `undefined` |
+| `console.error()`   | Print error   | `undefined` |
+| `console.warn()`    | Print warning | `undefined` |
+| `console.table()`   | Table display | `undefined` |
+| `console.time()`    | Start timer   | `undefined` |
+| `console.timeEnd()` | End timer     | `undefined` |
 
 ---
 
-## 4. Control Flow
+## 3. Number Functions & Values
+
+### Static (`Number.`)
+
+| Function / Value           | Purpose           | Returns   |
+| -------------------------- | ----------------- | --------- |
+| `Number()`                 | Convert to number | `number`  |
+| `Number.isNaN()`           | Strict NaN check  | `boolean` |
+| `Number.isInteger()`       | Integer check     | `boolean` |
+| `Number.parseInt()`        | Parse integer     | `number`  |
+| `Number.MAX_VALUE`         | Max number        | `number`  |
+| `Number.MIN_VALUE`         | Min number        | `number`  |
+| `Number.POSITIVE_INFINITY` | +∞                | `number`  |
+
+### Instance (`number.`)
+
+| Function     | Purpose           | Returns  |
+| ------------ | ----------------- | -------- |
+| `toFixed(n)` | Fixed decimals    | `string` |
+| `toString()` | Convert to string | `string` |
+
+---
+
+## 4. Math Object
+
+| Function / Value | Purpose         | Returns  |
+| ---------------- | --------------- | -------- |
+| `Math.abs(x)`    | Absolute value  | `number` |
+| `Math.ceil(x)`   | Round up        | `number` |
+| `Math.floor(x)`  | Round down      | `number` |
+| `Math.round(x)`  | Nearest integer | `number` |
+| `Math.max(a,b)`  | Max value       | `number` |
+| `Math.min(a,b)`  | Min value       | `number` |
+| `Math.random()`  | Random 0–1      | `number` |
+| `Math.pow(a,b)`  | Power           | `number` |
+| `Math.sqrt(x)`   | Square root     | `number` |
+| `Math.PI`        | π value         | `number` |
+
+---
+
+## 5. String Functions
+
+| Function          | Purpose            | Returns   |
+| ----------------- | ------------------ | --------- |
+| `length`          | String length      | `number`  |
+| `charAt(i)`       | Char at index      | `string`  |
+| `includes(str)`   | Contains substring | `boolean` |
+| `indexOf(str)`    | First index        | `number`  |
+| `slice(a,b)`      | Extract substring  | `string`  |
+| `substring(a,b)`  | Extract substring  | `string`  |
+| `replace(a,b)`    | Replace text       | `string`  |
+| `replaceAll(a,b)` | Replace all        | `string`  |
+| `split(sep)`      | Split to array     | `Array`   |
+| `toUpperCase()`   | Uppercase          | `string`  |
+| `toLowerCase()`   | Lowercase          | `string`  |
+| `trim()`          | Remove spaces      | `string`  |
+
+---
+
+## 6. Array Functions
+
+| Function           | Purpose      | Returns               |
+| ------------------ | ------------ | --------------------- |
+| `push(x)`          | Add end      | `number` (new length) |
+| `pop()`            | Remove end   | `any`                 |
+| `shift()`          | Remove start | `any`                 |
+| `unshift(x)`       | Add start    | `number`              |
+| `map(fn)`          | Transform    | `Array`               |
+| `filter(fn)`       | Filter       | `Array`               |
+| `reduce(fn, init)` | Reduce       | `any`                 |
+| `find(fn)`         | First match  | `any`                 |
+| `findIndex(fn)`    | Match index  | `number`              |
+| `includes(x)`      | Contains     | `boolean`             |
+| `some(fn)`         | Any true     | `boolean`             |
+| `every(fn)`        | All true     | `boolean`             |
+| `concat(arr)`      | Merge arrays | `Array`               |
+| `slice(a,b)`       | Copy portion | `Array`               |
+| `splice()`         | Modify array | `Array`               |
+
+---
+
+## 7. Object Functions
+
+| Function              | Purpose            | Returns         |
+| --------------------- | ------------------ | --------------- |
+| `Object.keys(obj)`    | Keys               | `Array<string>` |
+| `Object.values(obj)`  | Values             | `Array<any>`    |
+| `Object.entries(obj)` | Key-value pairs    | `Array`         |
+| `Object.assign(a,b)`  | Merge objects      | `Object`        |
+| `Object.freeze(obj)`  | Make immutable     | `Object`        |
+| `Object.seal(obj)`    | Prevent add/remove | `Object`        |
+| `hasOwn(obj,key)`     | Own property check | `boolean`       |
+
+---
+
+## 8. Date Class
+
+| Function           | Purpose      | Returns  |
+| ------------------ | ------------ | -------- |
+| `new Date()`       | Current date | `Date`   |
+| `getFullYear()`    | Year         | `number` |
+| `getMonth()`       | Month (0–11) | `number` |
+| `getDate()`        | Day          | `number` |
+| `getTime()`        | Timestamp    | `number` |
+| `toISOString()`    | ISO string   | `string` |
+| `toLocaleString()` | Local format | `string` |
+
+---
+
+## 9. JSON
+
+| Function              | Purpose       | Returns  |
+| --------------------- | ------------- | -------- |
+| `JSON.stringify(obj)` | Object → JSON | `string` |
+| `JSON.parse(str)`     | JSON → Object | `Object` |
+
+---
+
+## 10. Functions & Return Rules
 
 ```js
-if (a > 10) {}
-else {}
-
-switch(x) {
-  case 1: break;
-  default: break;
+function f() {
+  return 5
 }
-
-for (let i = 0; i < 3; i++) {}
-while (x > 0) {}
-do {} while (x > 0)
 ```
 
----
-
-## 5. Functions
-
-```js
-function add(a, b) {
-  return a + b
-}
-
-const sub = (a, b) => a - b
-```
-
-| Concept        | Meaning                     |
-| -------------- | --------------------------- |
-| Arrow function | Short syntax                |
-| Callback       | Function passed as argument |
-| IIFE           | Runs immediately            |
-
-```js
-(() => console.log("run"))()
-```
-
----
-
-## 6. Scope & Hoisting
-
-| Concept  | Explanation                    |
-| -------- | ------------------------------ |
-| Scope    | Variable visibility            |
-| Hoisting | `var` & functions moved up     |
-| Closure  | Function remembers outer scope |
-
-```js
-function outer() {
-  let x = 5
-  return () => x
-}
-```
-
----
-
-## 7. Arrays
-
-```js
-const arr = [1,2,3]
-```
-
-| Method     | Function     |
+| Case       | Return Value |
 | ---------- | ------------ |
-| `push`     | Add end      |
-| `pop`      | Remove end   |
-| `shift`    | Remove start |
-| `unshift`  | Add start    |
-| `map`      | Transform    |
-| `filter`   | Select       |
-| `reduce`   | Accumulate   |
-| `find`     | First match  |
-| `includes` | Contains     |
-
-```js
-arr.map(x => x * 2)
-```
+| `return x` | `x`          |
+| `return`   | `undefined`  |
+| no return  | `undefined`  |
 
 ---
 
-## 8. Objects
+## 11. Classes
 
 ```js
-const user = {
-  name: "A",
-  age: 20
+class User {
+  constructor(name) {
+    this.name = name
+  }
+
+  greet() {
+    return "Hello " + this.name
+  }
 }
 ```
 
-| Operation | Example               |
-| --------- | --------------------- |
-| Access    | `user.name`           |
-| Add       | `user.id = 1`         |
-| Delete    | `delete user.age`     |
-| Keys      | `Object.keys(user)`   |
-| Values    | `Object.values(user)` |
+| Part            | Purpose        | Returns  |
+| --------------- | -------------- | -------- |
+| `constructor()` | Initialize     | instance |
+| `method()`      | Class function | any      |
+| `new Class()`   | Create object  | instance |
 
 ---
 
-## 9. Destructuring
+## 12. Promises & Async
 
-```js
-const [a, b] = [1, 2]
-const {name} = user
-```
-
----
-
-## 10. Spread & Rest
-
-```js
-const a = [1,2]
-const b = [...a, 3]
-
-function sum(...nums) {}
-```
+| Function          | Purpose         | Returns        |
+| ----------------- | --------------- | -------------- |
+| `new Promise(fn)` | Async wrapper   | `Promise`      |
+| `then(fn)`        | Success handler | `Promise`      |
+| `catch(fn)`       | Error handler   | `Promise`      |
+| `finally(fn)`     | Cleanup         | `Promise`      |
+| `async function`  | Async function  | `Promise`      |
+| `await promise`   | Wait result     | resolved value |
 
 ---
 
-## 11. Strings
+## 13. Error Handling
 
-| Method          | Function      |
-| --------------- | ------------- |
-| `length`        | Size          |
-| `toUpperCase()` | Uppercase     |
-| `includes()`    | Contains      |
-| `slice()`       | Cut           |
-| `replace()`     | Replace       |
-| `split()`       | To array      |
-| `trim()`        | Remove spaces |
+| Function / Class    | Purpose      | Returns |
+| ------------------- | ------------ | ------- |
+| `try/catch`         | Catch errors | —       |
+| `throw new Error()` | Throw error  | never   |
+| `Error(message)`    | Error object | `Error` |
 
-```
-```
+---
+
+## 14. Type & Value Checks
+
+| Expression           | Returns   |
+| -------------------- | --------- |
+| `typeof x`           | `string`  |
+| `x instanceof Class` | `boolean` |
+| `Array.isArray(x)`   | `boolean` |
+| `Boolean(x)`         | `boolean` |
+| `String(x)`          | `string`  |
+| `Number(x)`          | `number`  |
+
+
+Just say 👍
