@@ -222,6 +222,3 @@ class User {
 | `Boolean(x)`         | `boolean` |
 | `String(x)`          | `string`  |
 | `Number(x)`          | `number`  |
-
-
-Just say 👍
