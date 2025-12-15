@@ -177,13 +177,3 @@ Example:
 | `aria-hidden`   | Hide from screen reader | `aria-hidden="true"`    |
 | `aria-expanded` | Toggle state            | `aria-expanded="false"` |
 
----
-
-**If you want:**
-
-* Printable PDF version
-* Beginner-only list
-* HTML + CSS + JS combined cheat sheet
-* Interview / quiz questions
-
-Tell me 👍
