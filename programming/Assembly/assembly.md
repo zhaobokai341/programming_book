@@ -4,34 +4,45 @@
 
 ## **1. Data Transfer**
 
-| Instruction               | Operands | Description              | Effect                  |
-| ------------------------- | -------- | ------------------------ | ----------------------- |
-| `MOV`                     | dst, src | Move data                | dst = src               |
-| `MOVZX`                   | dst, src | Move with zero extension | dst = zero-extended src |
-| `MOVSX`                   | dst, src | Move with sign extension | dst = sign-extended src |
-| `XCHG`                    | op1, op2 | Swap values              | Values exchanged        |
-| `LEA`                     | dst, mem | Load effective address   | dst = address           |
-| `PUSH`                    | src      | Push onto stack          | RSP -= size             |
-| `POP`                     | dst      | Pop from stack           | RSP += size             |
-| `MOVSB/MOVSW/MOVSD/MOVSQ` | —        | String move              | Memory copy             |
+| Instruction               | Operands       | Description                        | Effect / Return            |
+| ------------------------- | -------------- | ---------------------------------- | -------------------------- |
+| `MOV`                     | `dst, src`     | Copy value                         | `dst = src`                |
+| `MOVZX`                   | `dst, src`     | Move with zero extension           | Zero-extended value        |
+| `MOVSX`                   | `dst, src`     | Move with sign extension           | Sign-extended value        |
+| `XCHG`                    | `op1, op2`     | Swap values                        | Values exchanged           |
+| `LEA`                     | `dst, mem`     | Load effective address             | Address computed only      |
+| `PUSH`                    | `src`          | Push value onto stack              | `RSP -= size`              |
+| `POP`                     | `dst`          | Pop value from stack               | `dst = [RSP]; RSP += size` |
+| `MOVSB/MOVSW/MOVSD/MOVSQ` | none           | Move string byte/word/dword/qword  | Memory copy                |
+| `MOVSS`                   | `xmm, mem/reg` | Move scalar single-precision float | Copies float to/from XMM   |
+| `MOVSD`                   | `xmm, mem/reg` | Move scalar double-precision float | Copies double to/from XMM  |
+| `MOVAPS`                  | `xmm, xmm/mem` | Move aligned packed float          | XMM register copy          |
+| `MOVUPS`                  | `xmm, xmm/mem` | Move unaligned packed float        | XMM register copy          |
 
 ---
 
 ## **2. Arithmetic**
-
-| Instruction | Operands        | Description          | Effect                              |
-| ----------- | --------------- | -------------------- | ----------------------------------- |
-| `ADD`       | dst, src        | Add                  | dst += src                          |
-| `SUB`       | dst, src        | Subtract             | dst -= src                          |
-| `INC`       | dst             | Increment            | dst++                               |
-| `DEC`       | dst             | Decrement            | dst--                               |
-| `MUL`       | src             | Unsigned multiply    | RDX:RAX = RAX * src                 |
-| `IMUL`      | dst, src[, imm] | Signed multiply      | dst = dst * src                     |
-| `DIV`       | src             | Unsigned divide      | Quotient = RAX/src, RDX = remainder |
-| `IDIV`      | src             | Signed divide        | Quotient = RAX/src, RDX = remainder |
-| `NEG`       | dst             | Two’s complement     | dst = -dst                          |
-| `ADC`       | dst, src        | Add with carry       | dst += src + CF                     |
-| `SBB`       | dst, src        | Subtract with borrow | dst -= src + !CF                    |
+| Instruction | Operands       | Description                       | Effect / Return                 |
+| ----------- | -------------- | --------------------------------- | ------------------------------- |
+| `ADD`       | `dst, src`     | Integer addition                  | `dst = dst + src`               |
+| `SUB`       | `dst, src`     | Integer subtraction               | `dst = dst - src`               |
+| `INC`       | `dst`          | Increment                         | `dst++`                         |
+| `DEC`       | `dst`          | Decrement                         | `dst--`                         |
+| `MUL`       | `src`          | Unsigned multiply                 | Result in `RDX:RAX`             |
+| `IMUL`      | `dst, src`     | Signed multiply                   | Result in dst                   |
+| `DIV`       | `src`          | Unsigned divide                   | Quotient `RAX`, remainder `RDX` |
+| `IDIV`      | `src`          | Signed divide                     | Quotient `RAX`, remainder `RDX` |
+| `NEG`       | `dst`          | Two's complement negate           | `dst = -dst`                    |
+| `ADC`       | `dst, src`     | Add with carry                    | `dst = dst + src + CF`          |
+| `SBB`       | `dst, src`     | Subtract with borrow              | `dst = dst - src - CF`          |
+| `ADDSD`     | `xmm, xmm/mem` | Add scalar double-precision float | XMM result                      |
+| `SUBSD`     | `xmm, xmm/mem` | Subtract scalar double            | XMM result                      |
+| `MULSD`     | `xmm, xmm/mem` | Multiply scalar double            | XMM result                      |
+| `DIVSD`     | `xmm, xmm/mem` | Divide scalar double              | XMM result                      |
+| `ADDSS`     | `xmm, xmm/mem` | Add scalar single                 | XMM result                      |
+| `SUBSS`     | `xmm, xmm/mem` | Subtract scalar single            | XMM result                      |
+| `MULSS`     | `xmm, xmm/mem` | Multiply scalar single            | XMM result                      |
+| `DIVSS`     | `xmm, xmm/mem` | Divide scalar single              | XMM result                      |
 
 ---
 
@@ -61,18 +72,16 @@
 ---
 
 ## **5. Comparison & Flags**
-
-| Instruction | Operands | Description           | Effect                      |
-| ----------- | -------- | --------------------- | --------------------------- |
-| `CMP`       | op1, op2 | Compare               | Sets flags (ZF, SF, CF, OF) |
-| `TEST`      | op1, op2 | AND for flags         | Flags set, no data change   |
-| `SETcc`     | dst      | Set byte if condition | dst = 0 or 1                |
-| `CLC`       | —        | Clear carry           | CF = 0                      |
-| `STC`       | —        | Set carry             | CF = 1                      |
-| `CLD`       | —        | Clear direction       | DF = 0                      |
-| `STD`       | —        | Set direction         | DF = 1                      |
-| `LAHF`      | —        | Load flags to AH      | AH = FLAGS                  |
-| `SAHF`      | —        | Store AH to flags     | FLAGS = AH                  |
+| Instruction | Description               | Effect / Return             |
+| ----------- | ------------------------- | --------------------------- |
+| `PUSHF`     | Push EFLAGS/RFLAGS        | Push current flags to stack |
+| `POPF`      | Pop EFLAGS/RFLAGS         | Restore flags from stack    |
+| `LAHF`      | Load status flags into AH | AH = SF:ZF:AF:PF:CF         |
+| `SAHF`      | Store AH to flags         | Flags updated               |
+| `STC`       | Set carry flag            | CF = 1                      |
+| `CLC`       | Clear carry flag          | CF = 0                      |
+| `CLD`       | Clear direction flag      | DF = 0                      |
+| `STD`       | Set direction flag        | DF = 1                      |
 
 ---
 
@@ -190,6 +199,3 @@
 | `EFLAGS`     | Flags register             |
 | `XMM0-XMM15` | SIMD registers             |
 | `ST0-ST7`    | x87 floating point stack   |
-
-
-Do you want me to generate that too?
